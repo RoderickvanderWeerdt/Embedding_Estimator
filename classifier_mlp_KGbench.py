@@ -1,7 +1,7 @@
 from torch import nn
 import pandas as pd
 
-from dataset_AM import Emb_AM_Dataset, Features_MD_Dataset, ToTensor
+from dataset_Emb_KGBench_Dataset import Emb_KGBench_Dataset, Features_KGBench_Dataset, ToTensor
 from torch.utils.data import DataLoader
 import torch
 
@@ -15,23 +15,23 @@ def perform_prediction(dataset_fn, show_all, list_of_value_headers, save_model=F
     if test_set_fn == "":
         shuffle_dataset(dataset_fn)
         if list_of_value_headers == []:
-            training_data = Emb_AM_Dataset(csv_file="shuffled_dataset.csv", train=True, transform=ToTensor())
-            test_data = Emb_AM_Dataset(csv_file="shuffled_dataset.csv", train=False, transform=ToTensor())
+            training_data = Emb_KGBench_Dataset(csv_file="shuffled_dataset.csv", train=True, transform=ToTensor())
+            test_data = Emb_KGBench_Dataset(csv_file="shuffled_dataset.csv", train=False, transform=ToTensor())
         else:
-            training_data = Features_MD_Dataset(csv_file="shuffled_dataset.csv", list_of_value_headers=list_of_value_headers, train=True, transform=ToTensor())
-            test_data = Features_MD_Dataset(csv_file="shuffled_dataset.csv", list_of_value_headers=list_of_value_headers, train=False, transform=ToTensor())
+            training_data = Features_KGBench_Dataset(csv_file="shuffled_dataset.csv", list_of_value_headers=list_of_value_headers, train=True, transform=ToTensor())
+            test_data = Features_KGBench_Dataset(csv_file="shuffled_dataset.csv", list_of_value_headers=list_of_value_headers, train=False, transform=ToTensor())
     else:
         train_set_fn = dataset_fn
         if list_of_value_headers == []:
             shuffle_dataset(dataset_fn)
-            training_data = Emb_AM_Dataset(csv_file="shuffled_dataset.csv", train=True, transform=ToTensor(), train_all=True)
+            training_data = Emb_KGBench_Dataset(csv_file="shuffled_dataset.csv", train=True, transform=ToTensor(), train_all=True)
             shuffle_dataset(test_set_fn)
-            test_data = Emb_AM_Dataset(csv_file="shuffled_dataset.csv", train=False, transform=ToTensor(), train_all=True)
+            test_data = Emb_KGBench_Dataset(csv_file="shuffled_dataset.csv", train=False, transform=ToTensor(), train_all=True)
         else:
             shuffle_dataset(dataset_fn)
-            training_data = Features_MD_Dataset(csv_file="shuffled_dataset.csv", list_of_value_headers=list_of_value_headers, train=True, transform=ToTensor(), train_all=True)
+            training_data = Features_KGBench_Dataset(csv_file="shuffled_dataset.csv", list_of_value_headers=list_of_value_headers, train=True, transform=ToTensor(), train_all=True)
             shuffle_dataset(test_set_fn)
-            test_data = Features_MD_Dataset(csv_file="shuffled_dataset.csv", list_of_value_headers=list_of_value_headers, train=False, transform=ToTensor(), train_all=True)
+            test_data = Features_KGBench_Dataset(csv_file="shuffled_dataset.csv", list_of_value_headers=list_of_value_headers, train=False, transform=ToTensor(), train_all=True)
 
     batch_size = 8
 

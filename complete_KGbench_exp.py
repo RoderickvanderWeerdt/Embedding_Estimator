@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-from dataset_AM import Emb_AM_Dataset, ToTensor
+from dataset_KGbench import Emb_KGbench_Dataset, ToTensor
 from torch.utils.data import DataLoader
 import torch
 
@@ -55,11 +55,6 @@ def create_value_df(entities_df, skip_columns):
 			continue
 		value_df[col] = pd.to_numeric(entities_df[col], errors='coerce') #coerce makes nan out of none numeric values :D
 	return value_df
-
-def mae_for_df(numeric_df, new_data_df):
-	error_df = numeric_df - new_data_df
-	mae_df = error_df.abs().mean(axis=1)
-	return mae_df#.sort_index() #why sort this?
 
 def euclidean_for_df(numeric_df, new_data_df):
 	error_df = (numeric_df - new_data_df).pow(2)
@@ -158,14 +153,10 @@ if __name__ == '__main__':
 		new_embeddings = []
 		non_similar_counts = 0
 		for i, new_datapoint in new_dp_value_df.iterrows():
-			# print(value_df)
-			# exit()
-			# mae_df = mae_for_df(value_df, new_datapoint)
 			mae_df = euclidean_for_df(value_df, new_datapoint)
-			# print(mae_df, euc_df)
 			if np.isnan(mae_df.mean()):
-				# print("couldn't find any similar data points.") #WHAT DO WE DO WITH THIS?
-				new_dp_df = new_dp_df.drop(i)
+				# print("couldn't find any similar data points.")
+				new_dp_df = new_dp_df.drop(i) #when a datapoint without attributes is encountered we remove it from the validation set.
 				non_similar_counts += 1
 				# new_embeddings.append(average_emb)
 				continue
@@ -182,12 +173,11 @@ if __name__ == '__main__':
 
 	if use_classifier:
 		batch_size = 1
-		# data = Emb_AM_Dataset(csv_file=new_dp_fn, transform=ToTensor(), train_all=True, emb_header=update_emb_column_name)
-		data = Emb_AM_Dataset(csv_file=new_dp_fn, transform=ToTensor(), train_all=True, emb_header=update_emb_column_name)
+		data = Emb_KGBench_Dataset(csv_file=new_dp_fn, transform=ToTensor(), train_all=True, emb_header=update_emb_column_name)
 		dataloader = DataLoader(data, batch_size=batch_size)
 
 		model = NeuralNetwork(data.get_embedding_size(), data.get_n_classes())
-		# model = NeuralNetwork(data.get_embedding_size(), 8) #for AM!!!!!
+		# model = NeuralNetwork(data.get_embedding_size(), 8) #for AM, if not all 8 classes are in the random validation set
 		model.load_state_dict(torch.load(model_fn))
 		device = "cuda" if torch.cuda.is_available() else "cpu"
 

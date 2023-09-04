@@ -1,6 +1,6 @@
 # from make_embeddings_online import make_embeddings
 from make_embeddings import make_embeddings, epochs_make_embeddings
-from classifier_mlp_AM import perform_prediction
+from classifier_mlp_KGbench import perform_prediction
 
 def pipeline4(graph_c, entities_c, list_of_value_headers, test_set_fn, create_emb=True, show_all=True):
     graph_c_name = graph_c.split('/')[-1]

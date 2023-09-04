@@ -20,7 +20,7 @@ class ToTensor(object):
                 'target_class': torch.from_numpy(target)}
 
 
-class Emb_AM_Dataset(Dataset):
+class Emb_KGbench_Dataset(Dataset):
     """Dataset containing the embedding and the class 'hot' or 'cold' based on the temperature at that time."""
 
     def __init__(self, csv_file, train=True, transform=None, train_test_split=0.8, train_all=False, emb_header="emb", target_header='y'):
@@ -63,7 +63,7 @@ class Emb_AM_Dataset(Dataset):
         return len(self.embeddings[0].split(','))
 
 
-class Features_MD_Dataset(Dataset):
+class Features_KGbench_Dataset(Dataset):
     def __init__(self, csv_file, list_of_value_headers, train=True, transform=None, train_test_split=0.8, train_all=False, target_header='y'):
         csv_file = pd.read_csv(csv_file, sep=",")
         emb_classes = []
@@ -103,21 +103,3 @@ class Features_MD_Dataset(Dataset):
     def get_n_classes(self):
         print("creating a classifier for", len(list(set(self.targets))), "classes.")
         return(len(list(set(self.targets))))
-
-if __name__ == '__main__':
-    list_of_value_headers=["gram","gram2","gram3","gram4","mm","mm2","mm3","mm4","mm5","mm6","cm","cm2","cm3","cm4","cm5","cm6","cm7","cm8","cm9","cm10","cm11","cm12","cm13","cm14","cm15","cm16","cm17","cm18","cm19","cm20","cm21","cm22","cm23","cm24","cm25","cm26","cm27","cm28","cm29","cm30","ml","gr","gr2","gr3","gr4","gr5","gr6","gr7","gr8","kg","kg2","kg3","G","G2","gr.","m","liter"]
-    ds = Features_MD_Dataset("data/AM_entities_units_w_emb.csv", list_of_value_headers=list_of_value_headers)
-    # ds = Emb_AM_Dataset("data/entities_md_raw_VALIDATION_w_emb.csv")
-    dataloader = DataLoader(ds, batch_size=1)
-
-    print("n_classes:", ds.get_n_classes())
-    # print("embedding_size:", ds.get_embedding_size())
-
-    for sample in dataloader:
-        X = sample['embedding']
-        print(X)
-        y = sample['target_class']
-        # print("Shape of X [N, C, H, W]: ", X.shape)
-        # print("Shape of y: ", y.shape, y.dtype)
-        print(X.shape[1])
-        break
