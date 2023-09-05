@@ -98,28 +98,17 @@ if __name__ == '__main__':
 	md = False
 	testing=False
 	if am:
-		# entities_fn = "data/amplus-stripped_without_edm_object_w_emb.csv"
-		# new_dp_fn = "data/AM_entities_units_VALIDATION200.csv"
-		# new_dp_fn = "data/AM_entities_units_VALIDATION.csv"
-		# model_fn = "data/amplus-stripped_without_edm_object_w_emb.pytorch-model"
 		entities_fn = "data/AM_entities_units_w_emb.csv"
 		model_fn = "data/AM_entities_units_w_emb.pytorch-model"
 		new_dp_fn = "data/AM_entities_units_VALIDATION_w_emb_smaller.csv"
 	elif dmg:
-		# entities_fn = "data/dmg777k_stripped_without_thumbs_geo_w_emb.csv"
-		# new_dp_fn = "data/entities_dgm777k_VALIDATION.csv"
-		# model_fn = "data/dmg777k_stripped_without_thumbs_geo_w_emb.pytorch-model"
 		entities_fn = "data/entities_dmg777k_TRAIN_w_emb.csv"
 		new_dp_fn = "data/entities_dmg777k_VALIDATION_w_emb.csv"
 		model_fn = "data/entities_dmg777k_TRAIN_w_emb.pytorch-model"
 	elif md:
-		entities_fn = "data/md_raw_without_Images_w_emb.csv"
-		# new_dp_fn = "data/entities_md_raw_VALIDATION.csv"
-		# model_fn = "data/md_raw_without_Images_w_emb.pytorch-model"
 		entities_fn = "data/entities_md_raw_TRAIN_w_emb.csv"
-		# new_dp_fn = "data/entities_md_raw_VALIDATION_w_emb.csv"
 		new_dp_fn = "data/entities_md_raw_VALIDATION_w_emb.csv"
-		model_fn = "data/md_raw_without_Images_w_emb.pytorch-model"
+		model_fn = "data/entities_md_raw_TRAIN_w_emb.pytorch-model"
 	elif testing:
 		entities_fn = "data/AM_entities_units_w_emb_SMALL.csv"
 		new_dp_fn = "data/AM_entities_units_VALIDATION_w_emb_SMALL.csv"
