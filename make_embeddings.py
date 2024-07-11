@@ -47,7 +47,7 @@ def make_embeddings(entities_fn, kg_fn, new_entities_fn=None, entities_column_na
         walkers=[RandomWalker(2, 25, with_reverse=reverse, n_jobs=8, md5_bytes=None)],
         verbose=verb
     )
-    kg = KG(location=kg_fn, skip_predicates={"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"},)
+    kg = KG(location=kg_fn, skip_predicates={"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"})
     
     print(kg.is_exist(entities))
     embeddings, literals = transformer.fit_transform(kg, entities)

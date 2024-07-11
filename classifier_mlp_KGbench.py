@@ -1,7 +1,7 @@
 from torch import nn
 import pandas as pd
 
-from dataset_Emb_KGBench_Dataset import Emb_KGBench_Dataset, Features_KGBench_Dataset, ToTensor
+from dataset_KGbench import Emb_KGbench_Dataset, Features_KGbench_Dataset, ToTensor
 from torch.utils.data import DataLoader
 import torch
 
@@ -15,23 +15,25 @@ def perform_prediction(dataset_fn, show_all, list_of_value_headers, save_model=F
     if test_set_fn == "":
         shuffle_dataset(dataset_fn)
         if list_of_value_headers == []:
-            training_data = Emb_KGBench_Dataset(csv_file="shuffled_dataset.csv", train=True, transform=ToTensor())
-            test_data = Emb_KGBench_Dataset(csv_file="shuffled_dataset.csv", train=False, transform=ToTensor())
+            training_data = Emb_KGbench_Dataset(csv_file="shuffled_dataset.csv", train=True, transform=ToTensor())
+            test_data = Emb_KGbench_Dataset(csv_file="shuffled_dataset.csv", train=False, transform=ToTensor())
         else:
-            training_data = Features_KGBench_Dataset(csv_file="shuffled_dataset.csv", list_of_value_headers=list_of_value_headers, train=True, transform=ToTensor())
-            test_data = Features_KGBench_Dataset(csv_file="shuffled_dataset.csv", list_of_value_headers=list_of_value_headers, train=False, transform=ToTensor())
+            training_data = Features_KGbench_Dataset(csv_file="shuffled_dataset.csv", list_of_value_headers=list_of_value_headers, train=True, transform=ToTensor())
+            test_data = Features_KGbench_Dataset(csv_file="shuffled_dataset.csv", list_of_value_headers=list_of_value_headers, train=False, transform=ToTensor())
     else:
+        # print("implent this before you use it!")
+        # return 0
         train_set_fn = dataset_fn
-        if list_of_value_headers == []:
-            shuffle_dataset(dataset_fn)
-            training_data = Emb_KGBench_Dataset(csv_file="shuffled_dataset.csv", train=True, transform=ToTensor(), train_all=True)
-            shuffle_dataset(test_set_fn)
-            test_data = Emb_KGBench_Dataset(csv_file="shuffled_dataset.csv", train=False, transform=ToTensor(), train_all=True)
-        else:
-            shuffle_dataset(dataset_fn)
-            training_data = Features_KGBench_Dataset(csv_file="shuffled_dataset.csv", list_of_value_headers=list_of_value_headers, train=True, transform=ToTensor(), train_all=True)
-            shuffle_dataset(test_set_fn)
-            test_data = Features_KGBench_Dataset(csv_file="shuffled_dataset.csv", list_of_value_headers=list_of_value_headers, train=False, transform=ToTensor(), train_all=True)
+    #     if list_of_value_headers == []:
+        shuffle_dataset(dataset_fn)
+        training_data = Emb_KGbench_Dataset(csv_file="shuffled_dataset.csv", train=True, transform=ToTensor(), train_all=True)
+        shuffle_dataset(test_set_fn)
+        test_data = Emb_KGbench_Dataset(csv_file="shuffled_dataset.csv", train=False, transform=ToTensor(), train_all=True)
+    #     else:
+    #         shuffle_dataset(dataset_fn)
+    #         training_data = Features_KGBench_Dataset(csv_file="shuffled_dataset.csv", list_of_value_headers=list_of_value_headers, train=True, transform=ToTensor(), train_all=True)
+    #         shuffle_dataset(test_set_fn)
+    #         test_data = Features_KGBench_Dataset(csv_file="shuffled_dataset.csv", list_of_value_headers=list_of_value_headers, train=False, transform=ToTensor(), train_all=True)
 
     batch_size = 8
 
@@ -97,8 +99,8 @@ def perform_prediction(dataset_fn, show_all, list_of_value_headers, save_model=F
 
             # Compute prediction error
             pred = model(X.float())
-            # print(pred)
-            # print(y)
+            # print("pred", pred)
+            # print("y", y)
             loss = loss_fn(pred, y.long())
             _, predicted = torch.max(pred.data, 1)
             total += y.size(0)
@@ -115,6 +117,7 @@ def perform_prediction(dataset_fn, show_all, list_of_value_headers, save_model=F
                 loss, current = loss.item(), batch * len(X)
                 if show_all: print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
                 # print("x", X[0], "y", y[0], "pred", pred[0])
+                # print("y", y)
                 # print("x", X[0], "y", torch.round(y[0]), "pred", torch.round(pred[0]))
         
         correct /= total
@@ -135,7 +138,8 @@ def perform_prediction(dataset_fn, show_all, list_of_value_headers, save_model=F
                 test_tss.append(y)
                 pred = model(X.float())
                 _, predicted = torch.max(pred.data, 1)
-#                 print(predicted[0],y[0])
+                # print("pred", predicted)
+                # print("y",y)
                 total += y.size(0)
                 correct += (predicted == y).sum().item()
         correct /= total

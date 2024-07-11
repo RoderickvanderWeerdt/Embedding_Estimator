@@ -86,7 +86,7 @@ class Features_KGbench_Dataset(Dataset):
         if torch.is_tensor(idx):
             idx = idx.tolist()
         # print("idx:", idx)
-        classes = ['hot', 'cold']
+        # classes = ['hot', 'cold']
         target = self.targets.iloc[idx]
         target = np.array(target)
         
